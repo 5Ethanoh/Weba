@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <title>TDG-Trip</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+  <!-- <script src="{{ url_for('static', filename='js/table.js') }}"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+<h1 align="center">Members Lists</h1>
+<table class="rwd-table" id="table">
+  <tr>
+    <th>ID</th>
+    <th>Password</th>
+    <th>Name</th>
+    <th>etc</th>
+  </tr>
+
+<script type="text/javascript">
+    var tableElement = document.getElementById('table')
+    var uid_list = {{ id_list | tojson }};
+    var upwd_list = {{ pwd_list | tojson }};
+    var uname_list = {{ name_list | tojson }};
+    console.log(uid_list[0]);
+    for(var i=0; i<uid_list.length; i++){
+        var trElement = document.createElement('tr')
+        trElement.innerHTML = '<td>' + uid_list[i] + '</td> <td>' + upwd_list[i] + '</td> <td>' + uname_list[i] + '</td>'
+        tableElement.appendChild(trElement)
+    }
+</script>
+</table>
+    </body>
+</html>
