@@ -1,15 +1,15 @@
 import groovy.json.JsonSlurper
 
 node {
-  withEnv(['AZURE_SUBSCRIPTION_ID=6b00c9ec-126b-4aa6-b3f6-bd6e4691ed9e',
-        'AZURE_TENANT_ID=b2cff5cc-4762-4423-9592-16e4a7e5f788']) {
+  withEnv(['AZURE_SUBSCRIPTION_ID=9ef2b9be-e978-4877-9b44-7809aa4d0583',
+        'AZURE_TENANT_ID=69feb674-d7e0-47fd-8c9f-430367db0d31']) {
     stage('init') {
       checkout scm
     }
   
     stage('deploy') {
-      def resourceGroup = 'sbbaek-appdemo-krc-rg'
-      def webAppName = 'sbbaek-appdemo-krc-webapp'
+      def resourceGroup = 'RG-NEW-STUDY-TDG'
+      def webAppName = 'APPS-NEW-STUDY-TDG'
       // login Azure
       withCredentials([usernamePassword(credentialsId: 'AzureServicePrincipal', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID')]) {
        sh '''
@@ -18,7 +18,7 @@ node {
         '''
       }
       // upload package
-      sh 'az webapp up --resource-group sbbaek-appdemo-krc-rg --location koreacentral --plan appdemo-krc-webapp-plan --sku P1V2 --name sbbaek-appdemo-krc-webapp'
+      sh 'az webapp up --resource-group RG-NEW-STUDY-TDG --location koreacentral --plan hsoh_asp_Linux_koreacentral_0 --sku P1V2 --name APPS-NEW-STUDY-TDG'
       // log out
       sh 'az logout'
     }
