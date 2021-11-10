@@ -1,0 +1,26 @@
+import groovy.json.JsonSlurper
+
+node {
+  withEnv(['AZURE_SUBSCRIPTION_ID=6b00c9ec-126b-4aa6-b3f6-bd6e4691ed9e',
+        'AZURE_TENANT_ID=b2cff5cc-4762-4423-9592-16e4a7e5f788']) {
+    stage('init') {
+      checkout scm
+    }
+  
+    stage('deploy') {
+      def resourceGroup = 'sbbaek-appdemo-krc-rg'
+      def webAppName = 'sbbaek-appdemo-krc-webapp'
+      // login Azure
+      withCredentials([usernamePassword(credentialsId: 'AzureServicePrincipal', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID')]) {
+       sh '''
+          az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID
+          az account set -s $AZURE_SUBSCRIPTION_ID
+        '''
+      }
+      // upload package
+      sh 'az webapp up --resource-group sbbaek-appdemo-krc-rg --location koreacentral --plan appdemo-krc-webapp-plan --sku P1V2 --name sbbaek-appdemo-krc-webapp'
+      // log out
+      sh 'az logout'
+    }
+  }
+}
